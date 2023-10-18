@@ -1,0 +1,129 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=blue
+}
+
+\title{Gesnhin Impact total Wish approximation}
+\author{Author: d4vidyo\footnotemark[1]}
+\date{Date: September 2023}
+
+\footnotetext[1]{Email: \texttt{d4vidyo@gmail.com}}\\
+\begin{document}
+
+\maketitle
+\vfill
+\begin{abstract}
+This paper examines the Masterless Starglitter System in Genshin Impact (miHoYo, 2020) from the perspective of a player reinvesting their Wish-earned Glitter into new Wishes. The goal is to calculate the total number of Wishes a player can make starting with a certain amount of Primogems/Wishes.
+\\
+To simplify the calculations for players, certain assumptions are made. Through a systematic mathematical analysis, we derive a general formula.
+\\
+\\
+\end{abstract}
+\newpage
+
+\tableofcontents
+\newpage
+
+
+\section{Introduction}
+
+\subsection{Rules}
+As stated in the Genshin Impact Wish details, the relevant rules for a Character Banner are as follows:
+\begin{enumerate}
+    \item \textbf{4-Star:}
+    \begin{enumerate}
+        \item A player is guaranteed a 4-Star or above item at least once per 10 attempts.
+        \item A 4-Star weapon will always also give 2 Masterless Starglitter.
+        \item A 4-Star character will also give 2 Masterless Starglitter if the player already owns this character. From the 8th copy onwards, 5 Masterless Starglitter are given instead.
+    \end{enumerate}
+
+    \item \textbf{5-Star:}
+    \begin{enumerate}
+        \item A player is guaranteed a 5-Star character at least once per 90 attempts.
+        \item The Character Banner does not give any 5-Star weapons.
+        \item A 5-Star character will also give 10 Masterless Starglitter if the player already owns this character. From the 8th copy onwards, 25 Masterless Starglitter are given instead.
+    \end{enumerate}
+\end{enumerate}
+In the Paimon's Bargain item shop, we can exchange 5 Masterless Starglitter for 1 Intertwined Fate.
+
+
+\subsection{Assumptions}
+\begin{enumerate}
+    \item Exactly every 10th pull is a 4-Star.
+    \item Every 4-Star pull gives 2 Masterless Starglitter.
+\end{enumerate}
+\subsection{Assumption induced errors}
+\begin{enumerate}
+\item A 4-Star can be pulled more frequently than only on every 10th pull.
+\item A 4-Star only gives Masterless Starglitter if duplicate or weapon.
+\item A 4-Star can give 5 Masterless Starglitter if constellations are at max.
+\item 5-Star pulls are not taken into account 
+\end{enumerate}
+\newpage
+
+\section{Calculations}
+\subsection{Naming Conventions}
+$W_T:=$ Total Wish amount. (Number in Question)\\
+$P_0:=$ Raw Primogems available.\\
+$W_0:=$ Raw Intertwined Fate available.\\
+$e_0:=$ Extra Wishes after spending $P_0$ Primogems.\\
+$e_1:=$ Extra Wishes after spending $e_0$ Wishes.\\
+$E:=(e_n)_{n \in \mathbb{N}}$ Sequenz of Extra Wishes. $e_0, e_1,...$ \\
+\\
+
+\subsection{Calculations}
+The Total Wish amount $W_T$ should be calculated as:
+$$W_T:=\frac{P_0}{160}+\sum_{n=0}^{N}e_n$$
+The first Element $e_0$ of $E$ is calculated with:
+$$e_0:=\frac{P_0}{160}\cdot\frac{1}{10}\cdot2\cdot\frac{1}{5}=\frac{P_0}{4.000}$$
+$\frac{P_0}{160}$ gives us the amount of Wishes available at the start with $P_0$ Primogems. We divide it by $10$ to get the amount of 4-Star pulls. We multiply this by $2$ because each 4-Star pull gives $2$ Masterless Starglitter. We divide this by $5$ because we need 5 Masterless Starglitter to buy another Wish.
+\\
+The following Elements $e_n$ of $E$ are defined recursively with:
+$$e_n:=e_{n-1}\cdot\frac{1}{10}\cdot2\cdot\frac{1}{5}= \frac{e_{n-1}}{25}$$
+$e_{n-1}$ does not need to be divided by $160$ because it already is a Wish number rather than a Primogem number.
+\\
+We can express the $n$-th Element of $E$ as:
+$$e_n=e_0\cdot\frac{1}{25^n}= \frac{P_0}{4.000}\cdot\frac{1}{25^{n}}$$
+\\
+Therefore the Total Wish amount can be expressed as:
+$$W_T=\frac{P_0}{160}+\frac{P_0}{4.000}\cdot\sum_{n=0}^{N}\frac{1}{25^n}$$
+Which contains a Geometric series and can therefore be written as:
+$$W_T =\frac{P_0}{160}+\frac{P_0}{4.000}\cdot\frac{1-(\frac{1}{25})^{N+1}}{1-(\frac{1}{25})}$$
+We can easily calculate a Limit of this function
+$$\lim_{N\to\infty}\frac{1-(\frac{1}{25})^{N+1}}{1-(\frac{1}{25})}=\frac{1-0}{1-(\frac{1}{25})} = \frac{25}{24}$$
+Which now gives us our final approximation of our Total Wishes
+\begin{center}
+$W_T=\frac{P_0}{160}+\frac{P_0}{4.000}\cdot\frac{25}{24}$
+\end{center}
+\\
+\begin{center}
+$W_T=\frac{P_0}{160}+\frac{P_0}{3840}$
+\end{center}
+\newpage
+
+\section{Summary}
+As seen in the Assumption section above this is not an accurate formula and doesnt take some unknown factors into account. But due to its simplicity it can give a quick and easy overview of the to expected Total Wishes.
+The Formula gets even simpler when using our Intertwined Fate count $W_0$ instead of our Primogem count $P_0$:
+$$W_T = W_0 + \frac{W_0}{24} \;=\; W_0\cdot(1+\frac{1}{24})\;=\;W_0\cdot\frac{25}{24}$$
+Or in other words; We will have $4,\!1\bar{6}$\% additional Wishes .  
+\\
+For most Travelers this is negligible as the Number of extra Wishes with $90$ Pulls comes down to $3,\!75$ using this Formula.
+\\
+\\
+We can also calculate how many starting Wishes $W_0$ we would need to get to a total amount of $W_T$ Wishes:
+$$W_0=\frac{24}{25}\cdot W_T$$
+Or in other words; We need $96$\% of our desired Total Wish amount. 
+\newpage
+
+\section{References}
+\textbf{Genshin Impact} (miHoYo, 2020) \textit{Character Banner Details}
+\\
+\\
+\textbf{Genshin Impact} (miHoYo, 2020) \textit{Pimons Bargain item Shop}
+
+\end{document}
